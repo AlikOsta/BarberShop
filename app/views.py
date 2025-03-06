@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView
 from .forms import VisitForm
 from .models import Master, Service
@@ -22,15 +22,25 @@ class ThanksView(TemplateView):
         return context
 
 
-def index(request):
-    context = {
-        'masters': Master.objects.all(),
-        'services': Service.objects.all(),
-        'form': VisitForm()
-    }
-    if request.method == 'POST':
+class IndexView(View):
+    def get(self, request):
+        context = {
+            'masters': Master.objects.all(),
+            'services': Service.objects.all(),
+            'form': VisitForm(),
+        }
+        return render(request, 'app/main.html', context)
+    
+    def post(self, request):
         form = VisitForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('app:thanks')
-    return render(request, 'app/main.html', context)
+        
+        context = {
+            'masters': Master.objects.all(),
+            'services': Service.objects.all(),
+            'form': form,
+        }
+        return render(request, 'app/main.html', context)
+    

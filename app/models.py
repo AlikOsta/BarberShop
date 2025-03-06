@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Visit(models.Model):
 
@@ -13,7 +14,7 @@ class Visit(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя')
     phone = models.CharField(max_length=20, verbose_name='Телефон')
     comment = models.TextField(blank=True, verbose_name="Комментарий")
-    created_at = models.DateTimeField(auto_created=True, verbose_name='Дата создания')
+    created_at = models.DateTimeField(auto_created=True, default=timezone.now, verbose_name='Дата создания')
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, verbose_name='Статус')
     master = models.ForeignKey('Master',  on_delete=models.CASCADE, verbose_name='Мастер')
     services = models.ManyToManyField('Service', verbose_name='Услуги')
