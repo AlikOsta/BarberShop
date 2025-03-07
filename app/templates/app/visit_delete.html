@@ -1,0 +1,44 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Удаление записи #{{ visit.id }}{% endblock %}
+
+{% block navigation %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-scissors me-2"></i>Барбершоп</a>
+        <div class="navbar-text text-light">
+            <i class="bi bi-person-circle me-2"></i>{{ request.user.username }}
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-danger text-light">
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Подтверждение удаления
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="mb-4">Вы действительно хотите удалить запись клиента "{{ visit.name }}"?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-2"></i>Удалить
+                            </button>
+                            <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-2"></i>Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

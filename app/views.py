@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import EmptyPage
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView
+from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import VisitForm
 from .models import Master, Service, Visit
 
@@ -97,6 +97,17 @@ class VisitEditView(UpdateView):
     model = Visit
     template_name = 'app/visit_edit.html'
     fields = ['name', 'phone', 'master', 'services', 'status', 'comment']
+    success_url = reverse_lazy('app:visit_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('app:index')
+        return super().dispatch(request, *args, **kwargs)
+    
+
+class VisitDeleteView(DeleteView):
+    model = Visit
+    template_name = 'app/visit_delete.html'
     success_url = reverse_lazy('app:visit_list')
 
     def dispatch(self, request, *args, **kwargs):

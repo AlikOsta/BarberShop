@@ -108,6 +108,9 @@
                                 <a href="{% url 'app:visit_edit' visit.id %}" class="btn btn-sm btn-outline-primary" title="Редактировать">
                                     <i class="bi bi-pencil"></i>
                                 </a>
+                                <a href="{% url 'app:visit_delete' visit.id %}" class="btn btn-sm btn-outline-danger" title="Удалить">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

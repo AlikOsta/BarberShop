@@ -15,6 +15,7 @@ urlpatterns = [
     path('visits/', views.VisitListView.as_view(), name='visit_list'),
     path('visits/<int:pk>/', views.VisitDetailView.as_view(), name='visit_detail'),
     path('visits/<int:pk>/edit/', views.VisitEditView.as_view(), name='visit_edit'),
+    path('visits/<int:pk>/delete/', views.VisitDeleteView.as_view(), name='visit_delete'),
     
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
