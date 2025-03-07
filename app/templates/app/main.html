@@ -1,77 +1,208 @@
 {% extends 'app/base.html' %}
 {% load static %}
 
-{% block title %}Барбершоп Под Горшок{% endblock %}
-
 {% block content %}
-<!-- Мастера -->
-<section class="container py-5">
-    <h2 class="text-center mb-4">Наши мастера</h2>
-    <div class="row">
-        {% for master in masters %}
-        <div class="col-md-4 mb-4">
-            <div class="card text-center border-0">
-                <div class="mx-auto" style="width: 200px; height: 200px;">
-                    {% if master.photo %}
-                        <img src="{{ master.photo.url }}" class="rounded-circle w-100 h-100 object-fit-cover" alt="{{ master.first_name }}">
-                    {% else %}
-                        <img src="{% static 'images/default-avatar.jpg' %}" class="rounded-circle w-100 h-100 object-fit-cover" alt="{{ master.first_name }}">
-                    {% endif %}
+<!-- Hero секция -->
+<section class="bg-dark text-light py-5 mb-5">
+    <div class="container text-center">
+        <h1 class="display-4">Стильные стрижки для настоящих мужчин</h1>
+        <p class="lead">Доверьте свой образ профессионалам</p>
+        <a href="#booking" class="btn btn-primary btn-lg">Записаться</a>
+    </div>
+</section>
+
+<!-- Информационные блоки -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="bi bi-clock display-4 text-primary mb-3"></i>
+                        <h3>Режим работы</h3>
+                        <p>Пн-Пт: 10:00 - 21:00<br>Сб-Вс: 11:00 - 20:00</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ master.first_name }}</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="bi bi-geo-alt display-4 text-primary mb-3"></i>
+                        <h3>Наш адрес</h3>
+                        <p>г. Москва, ул. Примерная, д. 123<br>м. Барбершопная</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <i class="bi bi-telephone display-4 text-primary mb-3"></i>
+                        <h3>Контакты</h3>
+                        <p>+7 (999) 123-45-67<br>info@barbershop.ru</p>
+                    </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
+    </div>
+</section>
+
+<!-- Почему мы -->
+<section class="py-5 bg-dark text-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="display-4 mb-4">Почему выбирают нас</h2>
+                <ul class="list-unstyled">
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Профессиональные мастера</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Современное оборудование</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Стерильные инструменты</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Комфортная атмосфера</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'images/barbershop-interior.jpg' %}" class="img-fluid rounded shadow" alt="Интерьер барбершопа">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Мастера (Карусель) -->
+<section id="masters" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Наши мастера</h2>
+        <div id="mastersCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for master in masters %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                {% if master.photo %}
+                                    <img src="{{ master.photo.url }}" class="rounded-circle" width="150" height="150" alt="{{ master.first_name }}">
+                                {% else %}
+                                    <i class="bi bi-person-circle display-1"></i>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title">{{ master.first_name }} {{ master.last_name }}</h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#mastersCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Предыдущий</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mastersCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Следующий</span>
+            </button>
+        </div>
     </div>
 </section>
 
 <!-- Услуги -->
-<section class="container py-5 bg-light">
-    <h2 class="text-center mb-4">Наши услуги</h2>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Услуга</th>
-                    <th>Описание</th>
-                    <th>Цена</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for service in services %}
-                <tr>
-                    <td>{{ service.name }}</td>
-                    <td>{{ service.description }}</td>
-                    <td>{{ service.price }} ₽</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Наши услуги</h2>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Услуга</th>
+                        <th>Описание</th>
+                        <th>Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <td>{{ service.name }}</td>
+                        <td>{{ service.description }}</td>
+                        <td>{{ service.price }} ₽</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Дополнительные услуги -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Что вы получаете</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <i class="bi bi-cup-hot display-4 text-primary mb-3"></i>
+                    <h4>Напитки</h4>
+                    <p>Кофе, чай или прохладительные напитки во время обслуживания</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <i class="bi bi-wifi display-4 text-primary mb-3"></i>
+                    <h4>Wi-Fi</h4>
+                    <p>Бесплатный высокоскоростной интернет для наших клиентов</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <i class="bi bi-tv display-4 text-primary mb-3"></i>
+                    <h4>TV</h4>
+                    <p>Просмотр спортивных трансляций и развлекательных каналов</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <i class="bi bi-credit-card display-4 text-primary mb-3"></i>
+                    <h4>Оплата</h4>
+                    <p>Принимаем наличные и банковские карты</p>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 <!-- Форма записи -->
-<section class="container py-5">
-    <h2 class="text-center mb-4">Записаться на стрижку</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="mb-3">
-                    {{ field }}
-                    {% if field.errors %}
-                    <div class="alert alert-danger">
-                        {{ field.errors }}
+<section id="booking" class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Записаться на стрижку</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                <div class="alert alert-danger mt-2">
+                                    {{ field.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary w-100">Записаться</button>
+                        </form>
                     </div>
-                    {% endif %}
                 </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary w-100">Записаться</button>
-            </form>
+            </div>
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var myCarousel = new bootstrap.Carousel(document.getElementById('mastersCarousel'), {
+            interval: 2000,
+            wrap: true
+        });
+    });
+</script>
 {% endblock %}
