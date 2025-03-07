@@ -7,10 +7,6 @@ from .models import Master, Service, Visit
 class ThanksView(TemplateView):
     template_name = 'app/thanks.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 class IndexView(CreateView):
     template_name = 'app/main.html'
@@ -24,3 +20,12 @@ class IndexView(CreateView):
         context['services'] = Service.objects.all()
         return context
     
+
+class MasterListView(ListView):
+    model = Master
+    template_name = 'app/master_list.html'
+    context_object_name = 'masters'
+
+    
+
+
