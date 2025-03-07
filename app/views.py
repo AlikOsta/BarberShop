@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import EmptyPage
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
@@ -36,7 +37,7 @@ class MasterDetailView(DetailView):
     context_object_name = 'master'
 
 
-class VisitListView(ListView):
+class VisitListView(UserPassesTestMixin, ListView):
     model = Visit
     template_name = 'app/visit_list.html'
     context_object_name = 'visits'
@@ -68,10 +69,11 @@ class VisitListView(ListView):
         context['current_master'] = self.request.GET.get('master', '')
         return context
     
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect('app:index')
-        return super().dispatch(request, *args, **kwargs)
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return redirect('app:index')
 
     def post(self, request):
         visit_id = request.POST.get('visit_id')
@@ -82,35 +84,40 @@ class VisitListView(ListView):
     
 
 
-class VisitDetailView(DetailView):
+class VisitDetailView(UserPassesTestMixin, DetailView):
     model = Visit
     template_name = 'app/visit_detail.html'
     context_object_name = 'visit'
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect('app:index')
-        return super().dispatch(request, *args, **kwargs)
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return redirect('app:index')
     
 
-class VisitEditView(UpdateView):
+class VisitEditView(UserPassesTestMixin, UpdateView):
     model = Visit
-    template_name = 'app/visit_edit.html'
     form_class = VisitEditForm
+    template_name = 'app/visit_edit.html'
     success_url = reverse_lazy('app:visit_list')
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect('app:index')
-        return super().dispatch(request, *args, **kwargs)
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return redirect('app:index')
     
 
-class VisitDeleteView(DeleteView):
+class VisitDeleteView(UserPassesTestMixin, DeleteView):
     model = Visit
     template_name = 'app/visit_delete.html'
     success_url = reverse_lazy('app:visit_list')
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return redirect('app:index')
-        return super().dispatch(request, *args, **kwargs)
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        return redirect('app:index')
+    
+
