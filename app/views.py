@@ -3,7 +3,7 @@ from django.core.paginator import EmptyPage
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
-from .forms import VisitForm
+from .forms import VisitForm, VisitEditForm
 from .models import Master, Service, Visit
 
 
@@ -96,7 +96,7 @@ class VisitDetailView(DetailView):
 class VisitEditView(UpdateView):
     model = Visit
     template_name = 'app/visit_edit.html'
-    fields = ['name', 'phone', 'master', 'services', 'status', 'comment']
+    form_class = VisitEditForm
     success_url = reverse_lazy('app:visit_list')
 
     def dispatch(self, request, *args, **kwargs):
