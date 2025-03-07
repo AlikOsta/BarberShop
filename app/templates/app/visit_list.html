@@ -1,0 +1,144 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Список записей{% endblock %}
+
+{% block navigation %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-scissors me-2"></i>Барбершоп</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    {% comment %} <a class="nav-link" href="{% url 'app:master_list' %}">Мастера</a> {% endcomment %}
+                </li>
+            </ul>
+            <div class="navbar-text text-light">
+                <i class="bi bi-person-circle me-2"></i>{{ request.user.username }}
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Управление записями</h1>
+
+<!-- Фильтры -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" name="q" class="form-control" placeholder="Поиск по имени или телефону" value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">Все статусы</option>
+                    {% for status_id, status_name in status_choices %}
+                    <option value="{{ status_id }}" {% if current_status == status_id|stringformat:"i" %}selected{% endif %}>
+                        {{ status_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="master" class="form-select">
+                    <option value="">Все мастера</option>
+                    {% for master in masters %}
+                    <option value="{{ master.id }}" {% if current_master == master.id|stringformat:"i" %}selected{% endif %}>
+                        {{ master.first_name }} {{ master.last_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-2"></i>Найти
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Таблица записей -->
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Дата создания</th>
+                        <th>Имя</th>
+                        <th>Телефон</th>
+                        <th>Мастер</th>
+                        <th>Статус</th>
+                        <th>Комментарий</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visit in visits %}
+                    <tr>
+                        <td>{{ visit.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ visit.name }}</td>
+                        <td>{{ visit.phone }}</td>
+                        <td>{{ visit.master }}</td>
+                        <td>
+                            <form method="post" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="visit_id" value="{{ visit.id }}">
+                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    {% for status_id, status_name in status_choices %}
+                                    <option value="{{ status_id }}" {% if visit.status == status_id %}selected{% endif %}>
+                                        {{ status_name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td>{{ visit.comment|truncatechars:50 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4">Записей не найдено</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Пагинация -->
+    {% if is_paginated %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
