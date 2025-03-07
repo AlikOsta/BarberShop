@@ -19,7 +19,11 @@
                                 <i class="bi bi-person-circle display-1"></i>
                             {% endif %}
                         </div>
-                        <h4 class="card-title">{{ master.first_name }} {{ master.last_name }}</h4>
+                        <h4 class="card-title">
+                            <a href="{% url 'app:master_detail' master.pk %}" class="text-decoration-none text-dark">
+                                {{ master.first_name }} {{ master.last_name }}
+                            </a>
+                        </h4>
                         <p class="text-muted">Мастер-барбер</p>
                     </div>
                 </div>

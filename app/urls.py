@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('thanks/', views.ThanksView.as_view(), name='thanks'),
     path('masters/', views.MasterListView.as_view(), name='master_list'),
+    path('masters/<int:pk>/', views.MasterDetailView.as_view(), name='master_detail'),
     
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     

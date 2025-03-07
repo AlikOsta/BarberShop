@@ -26,6 +26,10 @@ class MasterListView(ListView):
     template_name = 'app/master_list.html'
     context_object_name = 'masters'
 
-    
+
+class MasterDetailView(DetailView):
+    model = Master
+    template_name = 'app/master_detail.html'
+    context_object_name = 'master'
 
 

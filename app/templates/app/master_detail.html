@@ -1,0 +1,58 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}{{ master.first_name }} {{ master.last_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    {% if master.photo %}
+                        <img src="{{ master.photo.url }}" class="card-img-top" alt="{{ master.first_name }}" style="height: 400px; object-fit: cover;">
+                    {% else %}
+                        <i class="bi bi-person-circle display-1 text-center py-5"></i>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h1 class="mb-4">{{ master.first_name }} {{ master.last_name }}</h1>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="mb-4">Услуги мастера</h3>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Услуга</th>
+                                        <th>Описание</th>
+                                        <th>Цена</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for service in master.services.all %}
+                                    <tr>
+                                        <td>{{ service.name }}</td>
+                                        <td>{{ service.description }}</td>
+                                        <td>{{ service.price }} ₽</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#booking" class="btn btn-primary">
+                                <i class="bi bi-calendar-check me-2"></i>Записаться
+                            </a>
+                            <a href="{% url 'app:master_list' %}" class="btn btn-outline-primary ms-2">
+                                <i class="bi bi-arrow-left me-2"></i>К списку мастеров
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
