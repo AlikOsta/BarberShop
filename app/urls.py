@@ -13,6 +13,8 @@ urlpatterns = [
     path('masters/', views.MasterListView.as_view(), name='master_list'),
     path('masters/<int:pk>/', views.MasterDetailView.as_view(), name='master_detail'),
     path('visits/', views.VisitListView.as_view(), name='visit_list'),
+    path('visits/<int:pk>/', views.VisitDetailView.as_view(), name='visit_detail'),
+    path('visits/<int:pk>/edit/', views.VisitEditView.as_view(), name='visit_edit'),
     
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     

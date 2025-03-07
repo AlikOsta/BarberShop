@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.paginator import EmptyPage
 from django.db.models import Q
-
-from django.views.generic import ListView, DetailView, View, CreateView, TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView
 from .forms import VisitForm
 from .models import Master, Service, Visit
 
@@ -79,3 +79,27 @@ class VisitListView(ListView):
         if visit_id and new_status:
             Visit.objects.filter(id=visit_id).update(status=new_status)
         return redirect('app:visit_list')
+    
+
+
+class VisitDetailView(DetailView):
+    model = Visit
+    template_name = 'app/visit_detail.html'
+    context_object_name = 'visit'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('app:index')
+        return super().dispatch(request, *args, **kwargs)
+    
+
+class VisitEditView(UpdateView):
+    model = Visit
+    template_name = 'app/visit_edit.html'
+    fields = ['name', 'phone', 'master', 'services', 'status', 'comment']
+    success_url = reverse_lazy('app:visit_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return redirect('app:index')
+        return super().dispatch(request, *args, **kwargs)
