@@ -32,4 +32,6 @@ class MasterDetailView(DetailView):
     template_name = 'app/master_detail.html'
     context_object_name = 'master'
 
+    
+
 
