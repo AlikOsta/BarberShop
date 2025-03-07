@@ -3,15 +3,20 @@ from django import forms
 
 
 class VisitForm(forms.ModelForm):
+    services = forms.ModelMultipleChoiceField(
+        queryset=models.Service.objects.all(),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        required=True
+    )
+    
     class Meta:
         model = models.Visit
         fields = ['name', 'phone', 'comment', 'master', 'services']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон'}),
-            'comment': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Комментарий'}),
-            'master': forms.Select(attrs={'class': 'form-control'}),
-            'services': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+            'master': forms.Select(attrs={'class': 'form-select'}),
         }
 
 

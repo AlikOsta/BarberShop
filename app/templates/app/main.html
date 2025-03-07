@@ -181,17 +181,29 @@
                         <h2 class="card-title text-center mb-4">Записаться на стрижку</h2>
                         <form method="post">
                             {% csrf_token %}
-                            {% for field in form %}
                             <div class="mb-3">
-                                <label class="form-label">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.errors %}
-                                <div class="alert alert-danger mt-2">
-                                    {{ field.errors }}
-                                </div>
-                                {% endif %}
+                                <label class="form-label">Имя</label>
+                                {{ form.name }}
                             </div>
-                            {% endfor %}
+                            <div class="mb-3">
+                                <label class="form-label">Телефон</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Мастер</label>
+                                {{ form.master }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Услуги</label>
+                                <div id="services-container">
+                                    <p class="text-muted" id="no-master-message">Сначала выберите мастера</p>
+                                    <div id="services-list" style="display: none;"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Комментарий</label>
+                                {{ form.comment }}
+                            </div>
                             <button type="submit" class="btn btn-primary w-100">Записаться</button>
                         </form>
                     </div>
@@ -204,11 +216,48 @@
 
 {% block scripts %}
 <script>
+    // Карусель мастеров
     document.addEventListener('DOMContentLoaded', function() {
         var myCarousel = new bootstrap.Carousel(document.getElementById('mastersCarousel'), {
-            interval: 2000,
+            interval: 3000,
             wrap: true
         });
     });
-</script>
+    
+    // Динамическая загрузка услуг
+    document.addEventListener('DOMContentLoaded', function() {
+        const masterSelect = document.getElementById('id_master');
+        const servicesContainer = document.getElementById('services-list');
+        const noMasterMessage = document.getElementById('no-master-message');
+    
+        masterSelect.addEventListener('change', function() {
+            const masterId = this.value;
+            if (masterId) {
+                fetch(`/get-services/?master_id=${masterId}`)
+                    .then(response => response.json())
+                    .then(services => {
+                        servicesContainer.innerHTML = '';
+                        services.forEach(service => {
+                            const div = document.createElement('div');
+                            div.className = 'form-check mb-2';
+                            div.innerHTML = `
+                                <input type="checkbox" name="services" value="${service.id}" 
+                                       class="form-check-input" id="service_${service.id}">
+                                <label class="form-check-label" for="service_${service.id}">
+                                    ${service.name} - ${service.price} ₽
+                                </label>
+                            `;
+                            servicesContainer.appendChild(div);
+                        });
+                        noMasterMessage.style.display = 'none';
+                        servicesContainer.style.display = 'block';
+                    });
+            } else {
+                servicesContainer.style.display = 'none';
+                noMasterMessage.style.display = 'block';
+            }
+        });
+    });
+    </script>
+
 {% endblock %}

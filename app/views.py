@@ -3,6 +3,7 @@ from django.core.paginator import EmptyPage
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import VisitForm, VisitEditForm
 from .models import Master, Service, Visit
@@ -121,3 +122,10 @@ class VisitDeleteView(UserPassesTestMixin, DeleteView):
         return redirect('app:index')
     
 
+class ServicesByMasterView(View):
+    def get(self, request):
+        master_id = request.GET.get('master_id')
+        if master_id:
+            services = Service.objects.filter(masters__id=master_id).values('id', 'name', 'price')
+            return JsonResponse(list(services), safe=False)
+        return JsonResponse([], safe=False)
