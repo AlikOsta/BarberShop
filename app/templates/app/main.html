@@ -128,7 +128,7 @@
 </section>
 
 <!-- Отзывы -->
-<section id="reviews" class="py-5 bg-light">
+<section class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-5">Отзывы наших клиентов</h2>
         <div class="position-relative">
@@ -302,38 +302,84 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Динамическая загрузка услуг
-        const masterSelect = document.getElementById('id_master');
-        const servicesContainer = document.getElementById('services-list');
-        const noMasterMessage = document.getElementById('no-master-message');
-    
-        masterSelect.addEventListener('change', function() {
-            const masterId = this.value;
-            if (masterId) {
-                fetch(`/get-services/?master_id=${masterId}`)
-                    .then(response => response.json())
-                    .then(services => {
-                        servicesContainer.innerHTML = '';
-                        services.forEach(service => {
-                            const div = document.createElement('div');
-                            div.className = 'form-check mb-2';
-                            div.innerHTML = `
-                                <input type="checkbox" name="services" value="${service.id}" 
-                                       class="form-check-input" id="service_${service.id}">
-                                <label class="form-check-label" for="service_${service.id}">
-                                    ${service.name} - ${service.price} ₽
-                                </label>
-                            `;
-                            servicesContainer.appendChild(div);
-                        });
-                        noMasterMessage.style.display = 'none';
-                        servicesContainer.style.display = 'block';
+    const masterSelect = document.getElementById('id_master');
+    const servicesContainer = document.getElementById('services-list');
+    const noMasterMessage = document.getElementById('no-master-message');
+
+    masterSelect.addEventListener('change', function() {
+        const masterId = this.value;
+        if (masterId) {
+            fetch(`/get-services/?master_id=${masterId}`)
+                .then(response => response.json())
+                .then(services => {
+                    servicesContainer.innerHTML = '';
+                    services.forEach(service => {
+                        const div = document.createElement('div');
+                        div.className = 'form-check mb-2';
+                        div.innerHTML = `
+                            <input type="checkbox" name="services" value="${service.id}" 
+                                   class="form-check-input" id="service_${service.id}">
+                            <label class="form-check-label" for="service_${service.id}">
+                                ${service.name} - ${service.price} ₽
+                            </label>
+                        `;
+                        servicesContainer.appendChild(div);
                     });
-            } else {
-                servicesContainer.style.display = 'none';
-                noMasterMessage.style.display = 'block';
+                    noMasterMessage.style.display = 'none';
+                    servicesContainer.style.display = 'block';
+                });
+        } else {
+            servicesContainer.style.display = 'none';
+            noMasterMessage.style.display = 'block';
+        }
+    });
+
+    // Подсветка активных разделов
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+    function highlightNavigation() {
+        const scrollPosition = window.scrollY + 100;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                const currentId = section.getAttribute('id');
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active', 'text-primary');
+                    if (link.getAttribute('href').includes(currentId)) {
+                        link.classList.add('active', 'text-primary');
+                    }
+                });
+            }
+        });
+
+        if (window.scrollY < 50) {
+            navLinks.forEach(link => {
+                link.classList.remove('active', 'text-primary');
+            });
+        }
+    }
+
+    // Плавная прокрутка
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('href').includes('#')) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').split('#')[1];
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
     });
-    </script>
-    {% endblock %}
-    
+
+    window.addEventListener('scroll', highlightNavigation);
+    window.addEventListener('load', highlightNavigation);
+});
+</script>
+{% endblock %}

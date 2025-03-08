@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -141,4 +141,7 @@ class ReviewCreateView(CreateView):
         return response
 
     
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
 
