@@ -1,7 +1,0 @@
-django 
-python-dotenv
-pillow
-telegram
-mistralai
-django-jazzmin
-django-simple-captcha
