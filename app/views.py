@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import VisitForm, VisitEditForm, ReviewForm
 from .models import Master, Service, Visit, Review
-from .utils import moderate_review
+
 
 
 class ThanksView(TemplateView):
@@ -131,10 +131,14 @@ class ServicesByMasterView(View):
         return JsonResponse([], safe=False)
     
 
-class ReviewListCreateView(CreateView):
+class ReviewCreateView(CreateView):
     template_name = 'app/reviews.html'
     form_class = ReviewForm
     success_url = '/#reviews'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        return response
 
     
 
