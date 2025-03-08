@@ -1,5 +1,6 @@
 from . import models
 from django import forms
+from captcha.fields import CaptchaField
 
 
 class VisitForm(forms.ModelForm):
@@ -35,9 +36,11 @@ class VisitEditForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
+    captcha = CaptchaField(label='Введите текст с картинки')
+
     class Meta:
         model = models.Review
-        fields = ['author_name', 'text', 'photo', 'master', 'rating']
+        fields = ['author_name', 'text', 'photo', 'master', 'rating', 'captcha']
         widgets = {
             'author_name': forms.TextInput(attrs={'class': 'form-control'}),
             'text': forms.Textarea(attrs={

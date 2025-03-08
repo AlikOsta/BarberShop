@@ -4,3 +4,4 @@ pillow
 telegram
 mistralai
 django-jazzmin
+django-simple-captcha

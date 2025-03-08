@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True if os.getenv('DEBUG', 'True') == 'True' else False
 
-ALLOWED_HOSTS = ["capybarashop.ru",]
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'jazzmin', 
@@ -21,7 +21,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'captcha',
+    'app',
+    
 ]
 
 MIDDLEWARE = [
@@ -121,4 +123,3 @@ JAZZMIN_SETTINGS = {
     },
     
 }
-
