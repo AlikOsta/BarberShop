@@ -28,7 +28,7 @@ def send_telegram_notification(sender, instance, action, **kwargs):
 *Услуги:* {', '.join(services) or 'не указаны'}
 *Дата создания:* {instance.created_at}
 *Мастер:* {instance.master.first_name} {instance.master.last_name}
-*Ссылка на админ-панель:* http://127.0.0.1:8000/admin/core/visit/{instance.id}/change/
+*Ссылка на админ-панель:* http://127.0.0.1:8000/admin/app/visit/{instance.id}/change/
 -------------------------------------------------------------
 """
         asyncio.run(send_telegram_message(TELEGRAM_BOT_TOKEN, YOUR_PERSONAL_CHAT_ID, message))
