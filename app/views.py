@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect
-from django.core.paginator import EmptyPage
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -7,6 +6,7 @@ from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import VisitForm, VisitEditForm, ReviewForm
 from .models import Master, Service, Visit, Review
+from .utils import moderate_review
 
 
 class ThanksView(TemplateView):
@@ -131,24 +131,10 @@ class ServicesByMasterView(View):
         return JsonResponse([], safe=False)
     
 
-class ReviewListCreateView(ListView):
-    model = Review
+class ReviewListCreateView(CreateView):
     template_name = 'app/reviews.html'
-    context_object_name = 'reviews'
+    form_class = ReviewForm
+    success_url = '/#reviews'
+
     
-    def get_queryset(self):
-        return Review.objects.filter(status=3).order_by('-created_at')
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ReviewForm()
-        context['masters'] = Master.objects.all()
-        return context
-    
-    def post(self, request):
-        form = ReviewForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('app:reviews')
-        return self.get(request)
 
