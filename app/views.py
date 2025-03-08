@@ -5,8 +5,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import VisitForm, VisitEditForm, ReviewForm
-from .models import Master, Service, Visit, Review
-
+from .models import Master, Service, Visit
 
 
 class ThanksView(TemplateView):

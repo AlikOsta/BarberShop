@@ -1,6 +1,6 @@
 from django.contrib import admin, messages
 from . import models
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count
 
 
 def mark_as_unverified(modeladmin, request, queryset):

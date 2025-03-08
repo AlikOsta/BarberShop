@@ -11,7 +11,6 @@ async def send_telegram_message(token, chat_id, message, parse_mode="Markdown"):
     except Exception as e:
         raise
 
-# Тестируем отправку прямо тут
 if __name__ == "__main__":
     message = "Тестовое сообщение"
     asyncio.run(send_telegram_message(TELEGRAM_BOT_TOKEN, YOUR_PERSONAL_CHAT_ID, message))
