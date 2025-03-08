@@ -1,6 +1,43 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from . import models
 from django.db.models import Sum, Count, Q
+
+
+def mark_as_unverified(modeladmin, request, queryset):
+    updated = queryset.update(status=0)
+    modeladmin.message_user(request, f'{updated} записей помечены как непроверенные', messages.SUCCESS)
+
+mark_as_unverified.short_description = 'Пометить как непроверенные'
+
+def mark_as_verified(modeladmin, request, queryset):
+    updated = queryset.update(status=1)
+    modeladmin.message_user(request, f'{updated} записей помечены как проверенные', messages.SUCCESS)
+
+mark_as_verified.short_description = 'Пометить как проверенные'
+
+def mark_as_cancelled(modeladmin, request, queryset):
+    updated = queryset.update(status=2)
+    modeladmin.message_user(request, f'{updated} записей помечены как отмененные', messages.SUCCESS)
+    
+mark_as_cancelled.short_description = 'Пометить как отмененные'
+
+def mark_as_completed(modeladmin, request, queryset):
+    updated = queryset.update(status=3)
+    modeladmin.message_user(request, f'{updated} записей помечены как выполненные', messages.SUCCESS)
+
+mark_as_completed.short_description = 'Пометить как выполненные'
+
+def mark_as_rejected(modeladmin, request, queryset):
+    updated = queryset.update(status = 2)
+    modeladmin.message_user(request, f'{updated} записей помечены как отклоненные', messages.SUCCESS)
+
+mark_as_rejected.short_description = 'Пометить как отклоненные'
+
+def mark_is_published(modeladmin, request, queryset):
+    updated = queryset.update(status = 3)
+    modeladmin.message_user(request, f'{updated} записей помечены как опубликованные', messages.SUCCESS)
+
+mark_is_published.short_description = 'Пометить как опубликованные'
 
 
 class PriceRangeFilter(admin.SimpleListFilter):
@@ -63,20 +100,7 @@ class ServiceAdmin(admin.ModelAdmin):
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
 
-    def mark_as_confirmed(self, request, queryset):
-        queryset.update(status=1)
-    mark_as_confirmed.short_description = "Проверено"
-
-    def mark_as_completed(self, request, queryset):
-        queryset.update(status=3)
-    mark_as_completed.short_description = "Опубликовано"
-
-    def mark_as_cancelled(self, request, queryset):
-        queryset.update(status=2)
-    mark_as_cancelled.short_description = "Отклонено"
-
-    actions = ['mark_as_confirmed', 'mark_as_completed', 'mark_as_cancelled']
-
+    actions = [mark_as_unverified, mark_as_verified, mark_as_rejected, mark_is_published]
     list_display = ['author_name', 'master', 'rating', 'status', 'created_at' ]
     list_filter = ['rating', 'created_at', 'status', 'master']
     search_fields = ['author_name', 'text', 'master']
@@ -102,19 +126,7 @@ class VisitAdmin(admin.ModelAdmin):
 
     get_total_price.short_description = 'Общая стоимость услуг'
 
-    def mark_as_confirmed(self, request, queryset):
-        queryset.update(status=1)
-    mark_as_confirmed.short_description = "Подтверждена"
-
-    def mark_as_completed(self, request, queryset):
-        queryset.update(status=3)
-    mark_as_completed.short_description = "Выполнена"
-
-    def mark_as_cancelled(self, request, queryset):
-        queryset.update(status=2)
-    mark_as_cancelled.short_description = "Отменена"
-
-    actions = ['mark_as_confirmed', 'mark_as_completed', 'mark_as_cancelled']
+    actions = [mark_as_unverified, mark_as_verified, mark_as_cancelled, mark_as_completed]
     list_display = ['name', 'phone', 'created_at', 'status', 'master', 'get_total_price']
     list_filter = ['status', 'master', 'created_at', RegularClientFilter, PriceRangeFilter]
     search_fields = ['name', 'phone', 'comments']
