@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MinLengthValidator
 
 class Visit(models.Model):
 
@@ -14,7 +15,7 @@ class Visit(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя')
     phone = models.CharField(max_length=20, verbose_name='Телефон')
     comment = models.TextField(blank=True, verbose_name="Комментарий")
-    created_at = models.DateTimeField(auto_created=True, default=timezone.now, verbose_name='Дата создания')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, verbose_name='Статус')
     master = models.ForeignKey('Master',  on_delete=models.CASCADE, verbose_name='Мастер')
     services = models.ManyToManyField('Service', verbose_name='Услуги')
@@ -63,14 +64,15 @@ class Review(models.Model):
         (1, 'Проверено'),
         (2, 'Отклонено'),
         (3, 'Опубликовано'),
-
     ]
 
-    author_name = models.CharField(max_length=100, verbose_name='Имя автора')
-    text = models.TextField(verbose_name='Текст отзыва')
+    author_name = models.CharField(max_length=20, validators=[MinLengthValidator(5)], verbose_name='Имя автора')
+    text = models.TextField(max_length=500, validators=[MinLengthValidator(15)], verbose_name='Текст отзыва')
     photo = models.ImageField(upload_to='reviews/photos/', blank=True, null=True, verbose_name='Фотография')
-    created_at = models.DateTimeField(auto_created=True, verbose_name='Дата создания')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     status = models.IntegerField(choices=STATUS_CHOICES, default=0, verbose_name='Статус')
+    master = models.ForeignKey('Master', on_delete=models.CASCADE, verbose_name='Мастер')
+    rating = models.IntegerField(default=0, verbose_name='Рейтинг')
 
     def __str__(self):
         return f'Отзыв от {self.author_name} ({self.get_status_display()})'

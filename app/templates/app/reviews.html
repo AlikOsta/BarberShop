@@ -1,0 +1,149 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Отзывы{% endblock %}
+
+{% block navigation %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="bi bi-scissors me-2"></i>Барбершоп</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a href="#add_rew" class="btn btn-primary btn-lg">Оставить отзыв</a>
+    </div>
+</nav>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Список отзывов -->
+    <section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Отзывы наших клиентов</h2>
+        <div class="row g-4">
+            {% for review in reviews %}
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <!-- Фото -->
+                        <div class="mb-3">
+                            {% if review.photo %}
+                                <img src="{{ review.photo.url }}" class="rounded-circle" width="80" height="80" style="object-fit: cover;" alt="{{ review.author_name }}">
+                            {% else %}
+                                <i class="bi bi-person-circle text-secondary" style="font-size: 3rem;"></i>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Имя и рейтинг -->
+                        <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+                            <h6 class="card-title mb-0">{{ review.author_name }}</h6>
+                            <div class="text-warning">
+                                {% for i in "12345"|make_list %}
+                                <i class="bi bi-star-fill {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Текст отзыва -->
+                        <p class="card-text small mb-3">{{ review.text|truncatechars:100 }}</p>
+
+                        <!-- Дата -->
+                        <small class="text-muted">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            {{ review.created_at|date:"d.m.Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+    <!-- Форма отзыва -->
+    
+    <div id="add_rew" class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Оставить отзыв</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Ваше имя</label>
+                            {{ form.author_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ваше фото</label>
+                            {{ form.photo }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Мастер</label>
+                            {{ form.master }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ваш отзыв</label>
+                            {{ form.text }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Оценка</label>
+                            <div class="rating d-flex gap-2">
+                                {% for i in "12345"|make_list %}
+                                <i class="bi bi-star-fill fs-3 star-rating" 
+                                   data-rating="{{ i }}"
+                                   style="cursor: pointer;"
+                                   onmouseover="highlightStars({{ i }})"
+                                   onmouseout="resetStars()"
+                                   onclick="setRating({{ i }})"></i>
+                                {% endfor %}
+                            </div>
+                            {{ form.rating }}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Отправить отзыв</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let currentRating = 0;
+    const stars = document.querySelectorAll('.star-rating');
+    const ratingInput = document.querySelector('#id_rating');
+    
+    function highlightStars(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('text-warning');
+                star.classList.remove('text-muted');
+            } else {
+                star.classList.remove('text-warning');
+                star.classList.add('text-muted');
+            }
+        });
+    }
+    
+    function resetStars() {
+        if (currentRating === 0) {
+            stars.forEach(star => {
+                star.classList.remove('text-warning');
+                star.classList.add('text-muted');
+            });
+        } else {
+            highlightStars(currentRating);
+        }
+    }
+    
+    function setRating(rating) {
+        currentRating = rating;
+        ratingInput.value = rating;
+        highlightStars(rating);
+    }
+    </script>
+{% endblock %}

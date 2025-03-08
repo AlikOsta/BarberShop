@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
-from .forms import VisitForm, VisitEditForm
-from .models import Master, Service, Visit
+from .forms import VisitForm, VisitEditForm, ReviewForm
+from .models import Master, Service, Visit, Review
 
 
 class ThanksView(TemplateView):
@@ -129,3 +129,26 @@ class ServicesByMasterView(View):
             services = Service.objects.filter(masters__id=master_id).values('id', 'name', 'price')
             return JsonResponse(list(services), safe=False)
         return JsonResponse([], safe=False)
+    
+
+class ReviewListCreateView(ListView):
+    model = Review
+    template_name = 'app/reviews.html'
+    context_object_name = 'reviews'
+    
+    def get_queryset(self):
+        return Review.objects.filter(status=3).order_by('-created_at')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ReviewForm()
+        context['masters'] = Master.objects.all()
+        return context
+    
+    def post(self, request):
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('app:reviews')
+        return self.get(request)
+

@@ -4,6 +4,7 @@ from . import models
 admin.site.register(models.Master)
 admin.site.register(models.Service)
 admin.site.register(models.Visit)
+admin.site.register(models.Review)
 
 
 

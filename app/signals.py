@@ -4,12 +4,9 @@ from .models import Visit
 from .telegram_bot import send_telegram_message
 import os
 import asyncio
-from dotenv import load_dotenv
+from barber.settings import TELEGRAM_BOT_TOKEN, YOUR_PERSONAL_CHAT_ID
 
-load_dotenv()
 
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-YOUR_PERSONAL_CHAT_ID = os.getenv("YOUR_PERSONAL_CHAT_ID")
 
 @receiver(m2m_changed, sender=Visit.services.through)
 def send_telegram_notification(sender, instance, action, **kwargs):
@@ -34,3 +31,5 @@ def send_telegram_notification(sender, instance, action, **kwargs):
 -------------------------------------------------------------
 """
         asyncio.run(send_telegram_message(TELEGRAM_BOT_TOKEN, YOUR_PERSONAL_CHAT_ID, message))
+
+

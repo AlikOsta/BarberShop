@@ -32,3 +32,20 @@ class VisitEditForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-select'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = models.Review
+        fields = ['author_name', 'text', 'photo', 'master', 'rating']
+        widgets = {
+            'author_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Напишите отзыв...(минимум 30 символов)'
+            }),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+            'master': forms.Select(attrs={'class': 'form-select'}),
+            'rating': forms.HiddenInput()
+        }
