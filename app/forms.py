@@ -36,8 +36,10 @@ class VisitEditForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
-    captcha = CaptchaField(label='Введите текст с картинки')
-
+    captcha = CaptchaField(
+        label='Подтвердите что вы человек'
+    )
+    
     class Meta:
         model = models.Review
         fields = ['author_name', 'text', 'photo', 'master', 'rating', 'captcha']
