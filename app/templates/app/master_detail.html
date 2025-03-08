@@ -20,6 +20,10 @@
                 <h1 class="mb-4">{{ master.first_name }} {{ master.last_name }}</h1>
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
+                        {% if master.description %}
+                            <h3 class="mb-4">Информация</h3>
+                            <p>{{ master.description }}</p>
+                        {% endif %}
                         <h3 class="mb-4">Услуги мастера</h3>
                         <div class="table-responsive">
                             <table class="table">
@@ -46,7 +50,7 @@
                                 <i class="bi bi-calendar-check me-2"></i>Записаться
                             </a> 
                             <a href="{% url 'app:master_list' %}" class="btn btn-outline-primary ms-2">
-                                <i class="bi bi-arrow-left me-2"></i>К списку мастеров
+                                <i class="bi bi-arrow-left me-2"></i>К мастерам
                             </a>
                         </div>
                     </div>

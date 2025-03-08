@@ -24,6 +24,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,3 +132,24 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 YOUR_PERSONAL_CHAT_ID = os.getenv("YOUR_PERSONAL_CHAT_ID")
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY") 
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Barbershop Admin",
+    "site_header": "Barbershop",
+    "site_brand": "Под Горшок",
+    "site_logo": "images/logo.png",
+    "welcome_sign": "Добро пожаловать в Barbershop 'Под Горшок'",
+
+
+    "icons": {
+        "app.Visit": "fas fa-calendar-check",
+        "app.Master": "fas fa-user-tie",
+        "app.Service": "fas fa-cut",
+        "app.Review": "fas fa-star",
+        "auth.User": "fas fa-users-cog",
+        "auth.Group": "fas fa-users",
+    },
+
+    
+}
+

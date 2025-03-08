@@ -112,7 +112,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(models.Master)
 class MasterAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'phone', 'address']
+    list_display = ['first_name', 'last_name', 'description', 'phone', 'address']
     ordering = ['first_name', 'last_name']
     filter_horizontal = ['services']
 

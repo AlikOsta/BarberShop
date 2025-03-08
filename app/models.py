@@ -31,6 +31,7 @@ class Visit(models.Model):
 class Master(models.Model):
     first_name = models.CharField(max_length=100, verbose_name='Имя')
     last_name = models.CharField(max_length=100, verbose_name='Фамилия')
+    description = models.TextField(blank=True, verbose_name='Описание')
     phone = models.CharField(max_length=20, verbose_name='Телефон')
     address = models.CharField(max_length=255, verbose_name='Адрес')
     photo = models.ImageField(upload_to='master/photos/', blank=True, null=True, verbose_name='Фотография')
