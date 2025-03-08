@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True if os.getenv('DEBUG', 'True') == 'True' else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["capybarashop.ru",]
 
 INSTALLED_APPS = [
     'jazzmin', 
