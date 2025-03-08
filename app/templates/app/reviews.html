@@ -3,67 +3,9 @@
 
 {% block title %}Отзывы{% endblock %}
 
-{% block navigation %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/"><i class="bi bi-scissors me-2"></i>Барбершоп</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a href="#add_rew" class="btn btn-primary btn-lg">Оставить отзыв</a>
-    </div>
-</nav>
-</nav>
-{% endblock %}
-
 {% block content %}
 <div class="container py-5">
 
-    <!-- Список отзывов -->
-    <section class="py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">Отзывы наших клиентов</h2>
-        <div class="row g-4">
-            {% for review in reviews %}
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <!-- Фото -->
-                        <div class="mb-3">
-                            {% if review.photo %}
-                                <img src="{{ review.photo.url }}" class="rounded-circle" width="80" height="80" style="object-fit: cover;" alt="{{ review.author_name }}">
-                            {% else %}
-                                <i class="bi bi-person-circle text-secondary" style="font-size: 3rem;"></i>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Имя и рейтинг -->
-                        <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
-                            <h6 class="card-title mb-0">{{ review.author_name }}</h6>
-                            <div class="text-warning">
-                                {% for i in "12345"|make_list %}
-                                <i class="bi bi-star-fill {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-                        <!-- Текст отзыва -->
-                        <p class="card-text small mb-3">{{ review.text|truncatechars:100 }}</p>
-
-                        <!-- Дата -->
-                        <small class="text-muted">
-                            <i class="bi bi-calendar-event me-1"></i>
-                            {{ review.created_at|date:"d.m.Y" }}
-                        </small>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-    <!-- Форма отзыва -->
     
     <div id="add_rew" class="row justify-content-center">
         <div class="col-md-8">
