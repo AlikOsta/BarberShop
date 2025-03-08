@@ -26,7 +26,7 @@ def send_telegram_notification(sender, instance, action, **kwargs):
 *Телефон:* {instance.phone or 'не указан'} 
 *Комментарий:* {instance.comment or 'не указан'}
 *Услуги:* {', '.join(services) or 'не указаны'}
-*Дата создания:* {instance.created_at}
+*Дата создания:* {instance.created_at.strftime('%d.%m.%Y %H:%M')}
 *Мастер:* {instance.master.first_name} {instance.master.last_name}
 *Ссылка на админ-панель:* http://127.0.0.1:8000/admin/app/visit/{instance.id}/change/
 -------------------------------------------------------------
@@ -42,8 +42,18 @@ def review_post_save(sender, instance, created, **kwargs):
         review_text = review.text
         
         if moderate_review(review_text):
-            review.status = 1  # Проверено
+            review.status = 1  
+            message = f"""
+*Новый отзыв*
+*Имя:* {review.author_name}
+*Имя мастера:* {review.master.first_name} {review.master.last_name}
+*Отзыв:* {review_text}
+*Оценка:* {review.rating}/5
+*Дата создания:* {instance.created_at.strftime('%d.%m.%Y %H:%M')}
+*Ссылка на админ-панель:* http://127.0.0.1:8000/admin/app/review/{review.id}/change/
+            """
+            asyncio.run(send_telegram_message(TELEGRAM_BOT_TOKEN, YOUR_PERSONAL_CHAT_ID, message))
         else:
-            review.status = 2  # Отклонено
+            review.status = 2  
             
         review.save()
