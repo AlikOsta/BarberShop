@@ -6,7 +6,8 @@
 <section class="bg-dark text-light py-5 mb-5">
     <div class="container text-center">
         <h1 class="display-4">Стильные стрижки для настоящих мужчин</h1>
-        <p class="lead">Доверьте свой образ профессионалам</p>
+        <p class="lead">Мы создаем индивидуальный стиль, подчеркивающий вашу уникальность</p>
+        <p class="mb-4">Доверьтесь профессионалам с многолетним опытом</p>
         <a href="#booking" class="btn btn-primary btn-lg">Записаться</a>
     </div>
 </section>
@@ -21,6 +22,7 @@
                         <i class="bi bi-clock display-4 text-primary mb-3"></i>
                         <h3>Режим работы</h3>
                         <p>Пн-Пт: 10:00 - 21:00<br>Сб-Вс: 11:00 - 20:00</p>
+                        <p class="text-muted">Предварительная запись в любое удобное время</p>
                     </div>
                 </div>
             </div>
@@ -30,6 +32,7 @@
                         <i class="bi bi-geo-alt display-4 text-primary mb-3"></i>
                         <h3>Наш адрес</h3>
                         <p>г. Москва, ул. Примерная, д. 123<br>м. Барбершопная</p>
+                        <p class="text-muted">Удобное расположение в центре города</p>
                     </div>
                 </div>
             </div>
@@ -39,6 +42,7 @@
                         <i class="bi bi-telephone display-4 text-primary mb-3"></i>
                         <h3>Контакты</h3>
                         <p>+7 (999) 123-45-67<br>info@barbershop.ru</p>
+                        <p class="text-muted">Ответим на все ваши вопросы</p>
                     </div>
                 </div>
             </div>
@@ -53,10 +57,26 @@
             <div class="col-md-6">
                 <h2 class="display-4 mb-4">Почему выбирают нас</h2>
                 <ul class="list-unstyled">
-                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Профессиональные мастера</li>
-                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Современное оборудование</li>
-                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Стерильные инструменты</li>
-                    <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Комфортная атмосфера</li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                        <strong>Профессиональные мастера</strong>
+                        <p class="ms-4">Команда опытных барберов с международными сертификатами</p>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                        <strong>Современное оборудование</strong>
+                        <p class="ms-4">Используем только профессиональные инструменты премиум-класса</p>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                        <strong>Стерильные инструменты</strong>
+                        <p class="ms-4">Строгое соблюдение санитарных норм и правил гигиены</p>
+                    </li>
+                    <li class="mb-3">
+                        <i class="bi bi-check-circle-fill text-primary me-2"></i>
+                        <strong>Комфортная атмосфера</strong>
+                        <p class="ms-4">Уютный интерьер и внимательное отношение к каждому клиенту</p>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-6">
@@ -66,49 +86,99 @@
     </div>
 </section>
 
-<!-- Мастера (Карусель) -->
+<!-- Мастера -->
 <section id="masters" class="py-5">
     <div class="container">
         <h2 class="text-center mb-5">Наши мастера</h2>
-        <div id="mastersCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
+        <div class="position-relative">
+            <div class="row masters-carousel">
                 {% for master in masters %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                {% if master.photo %}
-                                    <img src="{{ master.photo.url }}" class="rounded-circle" width="150" height="150" alt="{{ master.first_name }}">
-                                {% else %}
-                                    <i class="bi bi-person-circle display-1"></i>
-                                {% endif %}
+                <div class="col">
+                    <a href="{% url 'app:master_detail' master.pk %}" class="text-decoration-none">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    {% if master.photo %}
+                                        <img src="{{ master.photo.url }}" class="rounded-circle" width="150" height="150" alt="{{ master.first_name }}">
+                                    {% else %}
+                                        <i class="bi bi-person-circle display-1"></i>
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title text-dark">{{ master.first_name }} {{ master.last_name }}</h5>
+                                <p class="text-muted">Стаж работы: 5 лет</p>
                             </div>
-                            <h5 class="card-title">{{ master.first_name }} {{ master.last_name }}</h5>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% endfor %}
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#mastersCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <button class="carousel-control-prev" type="button" data-bs-target=".masters-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
                 <span class="visually-hidden">Предыдущий</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#mastersCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <button class="carousel-control-next" type="button" data-bs-target=".masters-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
                 <span class="visually-hidden">Следующий</span>
             </button>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'app:master_list' %}" class="btn btn-primary">Все мастера</a>
         </div>
     </div>
 </section>
 
-<div class="text-center mt-4">
-    <a href="{% url 'app:master_list' %}" class="btn btn-primary btn-lg">
-        <i class="bi bi-people me-2"></i>Все мастера
-    </a>
-</div>
+<!-- Отзывы -->
+<section id="reviews" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Отзывы наших клиентов</h2>
+        <div class="position-relative">
+            <div class="row reviews-carousel">
+                {% for review in reviews %}
+                {% if review.status == 3 %}
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                {% if review.photo %}
+                                    <img src="{{ review.photo.url }}" class="rounded-circle me-3" width="60" height="60" alt="{{ review.author_name }}">
+                                {% else %}
+                                    <i class="bi bi-person-circle display-5 me-3"></i>
+                                {% endif %}
+                                <div>
+                                    <h5 class="card-title mb-1">{{ review.author_name }}</h5>
+                                    <div class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                        <i class="bi bi-star-fill {% if forloop.counter <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="card-text">{{ review.text }}</p>
+                            <p class="text-muted mb-0">Мастер: {{ review.master }}</p>
+                            <small class="text-muted">{{ review.created_at|date:"d.m.Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target=".reviews-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                <span class="visually-hidden">Предыдущий</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target=".reviews-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                <span class="visually-hidden">Следующий</span>
+            </button>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'app:reviews' %}" class="btn btn-primary">Оставить отзыв</a>
+        </div>
+    </div>
+</section>
 
 <!-- Услуги -->
-<section id="services" class="py-5 bg-light">
+<section id="services" class="py-5">
     <div class="container">
         <h2 class="text-center mb-5">Наши услуги</h2>
         <div class="table-responsive">
@@ -135,7 +205,7 @@
 </section>
 
 <!-- Дополнительные услуги -->
-<section class="py-5">
+<section class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-5">Что вы получаете</h2>
         <div class="row g-4">
@@ -143,7 +213,7 @@
                 <div class="text-center">
                     <i class="bi bi-cup-hot display-4 text-primary mb-3"></i>
                     <h4>Напитки</h4>
-                    <p>Кофе, чай или прохладительные напитки во время обслуживания</p>
+                    <p>Широкий выбор напитков: кофе, чай, прохладительные напитки</p>
                 </div>
             </div>
             <div class="col-md-3">
@@ -164,7 +234,7 @@
                 <div class="text-center">
                     <i class="bi bi-credit-card display-4 text-primary mb-3"></i>
                     <h4>Оплата</h4>
-                    <p>Принимаем наличные и банковские карты</p>
+                    <p>Удобные способы оплаты: наличные, банковские карты</p>
                 </div>
             </div>
         </div>
@@ -172,7 +242,7 @@
 </section>
 
 <!-- Форма записи -->
-<section id="booking" class="py-5 bg-light">
+<section id="booking" class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -216,16 +286,22 @@
 
 {% block scripts %}
 <script>
-    // Карусель мастеров
-    document.addEventListener('DOMContentLoaded', function() {
-        var myCarousel = new bootstrap.Carousel(document.getElementById('mastersCarousel'), {
-            interval: 3000,
-            wrap: true
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация карусели мастеров
+    const mastersCarousel = new bootstrap.Carousel(document.querySelector('.masters-carousel'), {
+        interval: false,
+        wrap: true,
+        slide: true
+    });
+
+    // Инициализация карусели отзывов
+    const reviewsCarousel = new bootstrap.Carousel(document.querySelector('.reviews-carousel'), {
+        interval: false,
+        wrap: true,
+        slide: true
     });
     
     // Динамическая загрузка услуг
-    document.addEventListener('DOMContentLoaded', function() {
         const masterSelect = document.getElementById('id_master');
         const servicesContainer = document.getElementById('services-list');
         const noMasterMessage = document.getElementById('no-master-message');
@@ -259,5 +335,5 @@
         });
     });
     </script>
-
-{% endblock %}
+    {% endblock %}
+    

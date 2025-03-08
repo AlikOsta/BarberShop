@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, View, CreateView, TemplateView, UpdateView, DeleteView
 from .forms import VisitForm, VisitEditForm, ReviewForm
-from .models import Master, Service, Visit
+from .models import Master, Service, Visit, Review
 
 
 class ThanksView(TemplateView):
@@ -20,8 +20,9 @@ class IndexView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['masters'] = Master.objects.all()
+        context['masters'] = Master.objects.select_related().prefetch_related('services').all()
         context['services'] = Service.objects.all()
+        context['reviews'] = Review.objects.filter(status=3).select_related('master').order_by('-created_at')
         return context
     
 
@@ -44,7 +45,7 @@ class VisitListView(UserPassesTestMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = Visit.objects.all().order_by('-created_at')
+        queryset = Visit.objects.select_related('master').prefetch_related('services').all().order_by('-created_at')
         search_query = self.request.GET.get('q', '')
         master_id = self.request.GET.get('master', '')
         status = self.request.GET.get('status', '')
