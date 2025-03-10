@@ -140,8 +140,8 @@ class ReviewCreateView(CreateView):
         response = super().form_valid(form)
         return response
 
-    
+
 
 def custom_404(request, exception):
-    return render(request, '404.html', status=404)
+    return render(request, 'app/404.html', status=404)
 

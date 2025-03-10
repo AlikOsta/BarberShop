@@ -3,24 +3,7 @@
 {% block title %}Список записей{% endblock %}
 
 {% block navigation %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/"><i class="bi bi-scissors me-2"></i>Барбершоп</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    {% comment %} <a class="nav-link" href="{% url 'app:master_list' %}">Мастера</a> {% endcomment %}
-                </li>
-            </ul>
-            <div class="navbar-text text-light">
-                <i class="bi bi-person-circle me-2"></i>{{ request.user.username }}
-            </div>
-        </div>
-    </div>
-</nav>
+    {% include 'app/menu_visit.html' %}
 {% endblock %}
 
 {% block content %}

@@ -3,14 +3,7 @@
 {% block title %}Удаление записи #{{ visit.id }}{% endblock %}
 
 {% block navigation %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/"><i class="bi bi-scissors me-2"></i>Барбершоп</a>
-        <div class="navbar-text text-light">
-            <i class="bi bi-person-circle me-2"></i>{{ request.user.username }}
-        </div>
-    </div>
-</nav>
+    {% include 'app/menu_visit.html' %}
 {% endblock %}
 
 {% block content %}
